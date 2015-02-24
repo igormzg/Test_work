@@ -12,16 +12,17 @@ namespace Products_grid.Models.Products
     using System;
     using System.Collections.Generic;
     
-    public partial class OperationType
+    public partial class Operations
     {
-        public OperationType()
-        {
-            this.Operations = new HashSet<Operations>();
-        }
-    
         public int Id { get; set; }
-        public string Name { get; set; }
+        public int UserId { get; set; }
+        public int ProductId { get; set; }
+        public int TypeId { get; set; }
+        public int Count { get; set; }
+        public System.DateTime Date { get; set; }
     
-        public virtual ICollection<Operations> Operations { get; set; }
+        public virtual Products Products { get; set; }
+        public virtual OperationType OperationType { get; set; }
+        public virtual UserProfile UserProfile { get; set; }
     }
 }
