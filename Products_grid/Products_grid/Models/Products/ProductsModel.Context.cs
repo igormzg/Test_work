@@ -13,21 +13,15 @@ namespace Products_grid.Models.Products
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class ProductsEntities : DbContext
+    public partial class ProductsContext : DbContext
     {
-        public ProductsEntities()
-            : base("name=ProductsEntities")
+        public ProductsContext()
+            : base("name=DefaultConnection")
         {
         }
     
-        protected override void OnModelCreating(DbModelBuilder modelBuilder)
-        {
-            throw new UnintentionalCodeFirstException();
-        }
-    
-        public DbSet<Operations> Operations { get; set; }
+        public DbSet<Operation> Operations { get; set; }
         public DbSet<OperationType> OperationType { get; set; }
-        public DbSet<Products> Products { get; set; }
-        public DbSet<UserProfile> UserProfile { get; set; }
+        public DbSet<Product> Products { get; set; }
     }
 }

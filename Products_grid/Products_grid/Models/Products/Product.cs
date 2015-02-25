@@ -12,11 +12,11 @@ namespace Products_grid.Models.Products
     using System;
     using System.Collections.Generic;
     
-    public partial class Products
+    public partial class Product
     {
-        public Products()
+        public Product()
         {
-            this.Operations = new HashSet<Operations>();
+            this.Operations = new HashSet<Operation>();
         }
     
         public int Id { get; set; }
@@ -24,6 +24,6 @@ namespace Products_grid.Models.Products
         public double Price { get; set; }
         public int Count { get; set; }
     
-        public virtual ICollection<Operations> Operations { get; set; }
+        public virtual ICollection<Operation> Operations { get; set; }
     }
 }

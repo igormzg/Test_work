@@ -18,6 +18,25 @@ namespace Products_grid
                         "~/Scripts/jquery.unobtrusive*",
                         "~/Scripts/jquery.validate*"));
 
+            bundles.Add(new ScriptBundle("~/bundles/jqgrid").Include(
+                        "~/Scripts/jqGrid/i18n/grid.locale-en.js",
+                        "~/Scripts/jqGrid/grid.base.js",
+                        "~/Scripts/jqGrid/grid.common.js",
+                        "~/Scripts/jqGrid/grid.formedit.js",
+                        "~/Scripts/jqGrid/grid.inlinedit.js",
+                        "~/Scripts/jqGrid/grid.celledit.js",
+                        "~/Scripts/jqGrid/grid.subgrid.js",
+                        "~/Scripts/jqGrid/grid.treegrid.js",
+                        "~/Scripts/jqGrid/grid.grouping.js",
+                        "~/Scripts/jqGrid/grid.custom.js",
+                        "~/Scripts/jqGrid/grid.tbltogrid.js",
+                        "~/Scripts/jqGrid/grid.import.js",
+                        "~/Scripts/jqGrid/jquery.fmatter.js",
+                        "~/Scripts/jqGrid/JsonXml.js",
+                        "~/Scripts/jqGrid/grid.jqueryui.js",
+                        "~/Scripts/jqGrid/grid.filter.js"
+                ));
+
             // Use the development version of Modernizr to develop with and learn from. Then, when you're
             // ready for production, use the build tool at http://modernizr.com to pick only the tests you need.
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(

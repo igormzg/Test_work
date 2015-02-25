@@ -12,7 +12,7 @@ namespace Products_grid.Models.Products
     using System;
     using System.Collections.Generic;
     
-    public partial class Operations
+    public partial class Operation
     {
         public int Id { get; set; }
         public int UserId { get; set; }
@@ -21,8 +21,8 @@ namespace Products_grid.Models.Products
         public int Count { get; set; }
         public System.DateTime Date { get; set; }
     
-        public virtual Products Products { get; set; }
+        public virtual Product Products { get; set; }
         public virtual OperationType OperationType { get; set; }
-        public virtual UserProfile UserProfile { get; set; }
+        public virtual UserProfile UserProfiles { get; set; }
     }
 }

@@ -5,13 +5,11 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="c68813993bbe411f8a91587f8ab065b5" Name="Diagram1">
-        <EntityTypeShape EntityType="Products.Operations" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="Products.Operation" Width="1.5" PointX="3.125" PointY="1" IsExpanded="true" />
         <EntityTypeShape EntityType="Products.OperationType" Width="1.5" PointX="0.75" PointY="1.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="Products.Products" Width="1.5" PointX="5.625" PointY="1.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="Products.Product" Width="1.5" PointX="5.625" PointY="1.25" IsExpanded="true" />
         <AssociationConnector Association="Products.FK_Operation_Product" ManuallyRouted="false" />
         <AssociationConnector Association="Products.FK_Operation_Type" ManuallyRouted="false" />
-        <EntityTypeShape EntityType="Products.UserProfile" Width="1.5" PointX="0.75" PointY="4.875" />
-        <AssociationConnector Association="Products.FK_Operation_User" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

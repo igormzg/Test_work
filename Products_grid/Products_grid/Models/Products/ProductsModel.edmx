@@ -32,13 +32,6 @@
           <Property Name="Price" Type="float" Nullable="false" />
           <Property Name="Count" Type="int" Nullable="false" />
         </EntityType>
-        <EntityType Name="UserProfile">
-          <Key>
-            <PropertyRef Name="UserId" />
-          </Key>
-          <Property Name="UserId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="UserName" Type="nvarchar(max)" />
-        </EntityType>
         <Association Name="FK_Operation_Product">
           <End Role="Products" Type="Self.Products" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -67,25 +60,10 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Operation_User">
-          <End Role="UserProfile" Type="Self.UserProfile" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="Operations" Type="Self.Operations" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="UserProfile">
-              <PropertyRef Name="UserId" />
-            </Principal>
-            <Dependent Role="Operations">
-              <PropertyRef Name="UserId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityContainer Name="ProductsStoreContainer">
           <EntitySet Name="Operations" EntityType="Self.Operations" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OperationType" EntityType="Self.OperationType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Products" EntityType="Self.Products" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="UserProfile" EntityType="Self.UserProfile" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_Operation_Product" Association="Self.FK_Operation_Product">
             <End Role="Products" EntitySet="Products" />
             <End Role="Operations" EntitySet="Operations" />
@@ -94,16 +72,12 @@
             <End Role="OperationType" EntitySet="OperationType" />
             <End Role="Operations" EntitySet="Operations" />
           </AssociationSet>
-          <AssociationSet Name="FK_Operation_User" Association="Self.FK_Operation_User">
-            <End Role="UserProfile" EntitySet="UserProfile" />
-            <End Role="Operations" EntitySet="Operations" />
-          </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="Products" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="Operations">
+        <EntityType Name="Operation">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
@@ -115,7 +89,6 @@
           <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
           <NavigationProperty Name="Products" Relationship="Self.FK_Operation_Product" FromRole="Operations" ToRole="Products" />
           <NavigationProperty Name="OperationType" Relationship="Self.FK_Operation_Type" FromRole="Operations" ToRole="OperationType" />
-          <NavigationProperty Name="UserProfile" Relationship="Products.FK_Operation_User" FromRole="Operations" ToRole="UserProfile" />
         </EntityType>
         <EntityType Name="OperationType">
           <Key>
@@ -125,7 +98,7 @@
           <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="Operations" Relationship="Self.FK_Operation_Type" FromRole="OperationType" ToRole="Operations" />
         </EntityType>
-        <EntityType Name="Products">
+        <EntityType Name="Product">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
@@ -136,10 +109,10 @@
           <NavigationProperty Name="Operations" Relationship="Self.FK_Operation_Product" FromRole="Products" ToRole="Operations" />
         </EntityType>
         <Association Name="FK_Operation_Product">
-          <End Role="Products" Type="Self.Products" Multiplicity="1">
+          <End Role="Products" Type="Products.Product" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Role="Operations" Type="Self.Operations" Multiplicity="*" />
+          <End Role="Operations" Type="Products.Operation" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Products">
               <PropertyRef Name="Id" />
@@ -153,7 +126,7 @@
           <End Role="OperationType" Type="Self.OperationType" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Role="Operations" Type="Self.Operations" Multiplicity="*" />
+          <End Role="Operations" Type="Products.Operation" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="OperationType">
               <PropertyRef Name="Id" />
@@ -164,9 +137,9 @@
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="ProductsEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Operations" EntityType="Self.Operations" />
+          <EntitySet Name="Operations" EntityType="Products.Operation" />
           <EntitySet Name="OperationType" EntityType="Self.OperationType" />
-          <EntitySet Name="Products" EntityType="Self.Products" />
+          <EntitySet Name="Products" EntityType="Products.Product" />
           <AssociationSet Name="FK_Operation_Product" Association="Self.FK_Operation_Product">
             <End Role="Products" EntitySet="Products" />
             <End Role="Operations" EntitySet="Operations" />
@@ -175,34 +148,7 @@
             <End Role="OperationType" EntitySet="OperationType" />
             <End Role="Operations" EntitySet="Operations" />
           </AssociationSet>
-          <EntitySet Name="UserProfile" EntityType="Products.UserProfile" />
-          <AssociationSet Name="FK_Operation_User" Association="Products.FK_Operation_User">
-            <End Role="UserProfile" EntitySet="UserProfile" />
-            <End Role="Operations" EntitySet="Operations" />
-          </AssociationSet>
         </EntityContainer>
-        <EntityType Name="UserProfile">
-          <Key>
-            <PropertyRef Name="UserId" />
-          </Key>
-          <Property Name="UserId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="UserName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Operations" Relationship="Products.FK_Operation_User" FromRole="UserProfile" ToRole="Operations" />
-        </EntityType>
-        <Association Name="FK_Operation_User">
-          <End Type="Products.UserProfile" Role="UserProfile" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Type="Products.Operations" Role="Operations" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="UserProfile">
-              <PropertyRef Name="UserId" />
-            </Principal>
-            <Dependent Role="Operations">
-              <PropertyRef Name="UserId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -210,7 +156,7 @@
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="ProductsStoreContainer" CdmEntityContainer="ProductsEntities">
           <EntitySetMapping Name="Operations">
-            <EntityTypeMapping TypeName="Products.Operations">
+            <EntityTypeMapping TypeName="Products.Operation">
               <MappingFragment StoreEntitySet="Operations">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
@@ -230,20 +176,12 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Products">
-            <EntityTypeMapping TypeName="Products.Products">
+            <EntityTypeMapping TypeName="Products.Product">
               <MappingFragment StoreEntitySet="Products">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Price" ColumnName="Price" />
                 <ScalarProperty Name="Count" ColumnName="Count" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="UserProfile">
-            <EntityTypeMapping TypeName="Products.UserProfile">
-              <MappingFragment StoreEntitySet="UserProfile">
-                <ScalarProperty Name="UserName" ColumnName="UserName" />
-                <ScalarProperty Name="UserId" ColumnName="UserId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

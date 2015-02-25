@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Products_grid.Models.Products;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -10,7 +11,8 @@ namespace Products_grid.Models
 {
     public class UsersContext : DbContext
     {
-        public UsersContext() : base("DefaultConnection")
+        public UsersContext()
+            : base("DefaultConnection")
         {
         }
 
@@ -24,6 +26,8 @@ namespace Products_grid.Models
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public int UserId { get; set; }
         public string UserName { get; set; }
+
+        public virtual ICollection<Operation> Operations { get; set; }
     }
 
     public class RegisterExternalLoginModel

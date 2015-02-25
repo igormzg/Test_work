@@ -16,12 +16,12 @@ namespace Products_grid.Models.Products
     {
         public OperationType()
         {
-            this.Operations = new HashSet<Operations>();
+            this.Operations = new HashSet<Operation>();
         }
     
         public int Id { get; set; }
         public string Name { get; set; }
     
-        public virtual ICollection<Operations> Operations { get; set; }
+        public virtual ICollection<Operation> Operations { get; set; }
     }
 }
