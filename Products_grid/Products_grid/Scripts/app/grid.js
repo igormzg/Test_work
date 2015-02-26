@@ -1,12 +1,15 @@
-﻿
+﻿window.PG = {};
+
 $(document).ready(function () {
-    $("#jsonmap").jqGrid({
+    $("#prod-grid").jqGrid({
         url: '/Home/GetProducts',
         datatype: "json",
-        colNames: ['Actions', 'Name', 'Price'],
+        colNames: ['Picker', 'Id', 'Count', 'Name', 'Price'],
         colModel: [
-            { name: 'act', index: 'act', sortable: false },
-            { name: 'Name', index: 'Name', width: 90, editable: true },
+            { width: 40, editable: false },
+            { name: 'Id', index: 'Id', hidedlg: true },
+            { name: 'Count', index: 'Count', hidedlg: true },
+            { name: 'Name', index: 'Name', width: 150, editable: true },
             { name: 'Price', index: 'Price', width: 100, editable: true }
         ],
         rowNum: 10,
@@ -21,32 +24,128 @@ $(document).ready(function () {
         },
         caption: "Products",
         height: '100%',
-        gridComplete: function () {
-            var ids = jQuery("#jsonmap").jqGrid('getDataIDs');
-            for (var i = 0; i < ids.length; i++) {
-                var cl = ids[i];
-                be = "<input type='button' value='Edit' onclick=\"$('#jsonmap').editRow('" + cl + "');\"  />";
-                se = "<input type='button' value='Save' onclick=\"$('#jsonmap').saveRow('" + cl + "');\"  />";
-                ce = "<input type='button' value='Cancel' onclick=\"$('#jsonmap').restoreRow('" + cl + "');\" />";
-                $("#jsonmap").jqGrid('setRowData', ids[i], { act: be + se + ce });
-            }
-        },
+        onSelectRow: $.proxy(window.PG.gridx.rowSelected, window.PG.gridx)
     });
-    $("#jsonmap").jqGrid('navGrid', '#pjmap', { edit: false, add: false, del: false });
-
-
-
-
+    $("#prod-grid").jqGrid('navGrid', '#pjmap', { edit: false, add: false, del: false });
+    $('#prod-grid').hideCol('Id');
+    $('#prod-grid').hideCol('Count');
     window.PG.gridx.init();
 });
 
 
 window.PG.gridx = {
+
     init: function () {
-        $('#edit-row-btn').on('click', window.PG.gridx.editRowClk);
-        //Подписатся на клик
+        $('#edit-rows-btn').on('click', $.proxy(this.editRowsClk, this ));
+        $('#save-rows-btn').on('click', $.proxy(this.saveRowsClk, this));
+        $('#cancel-rows-btn').on('click', $.proxy(this.cancelRowsClk, this));
+        $('#delete-rows-btn').on('click', $.proxy(this.deleteRowsClk, this));
     },
-    editRowClk: function () {
-        var rowId = $("#jsonmap").jqGrid('getGridParam', 'selrow');   
+
+    editRowsClk: function () {
+        var rowIndex = $("#prod-grid").jqGrid('getGridParam', 'selrow');
+        $('#prod-grid').editRow(rowIndex);
+        this.editBtnState(true);
+    },
+
+    saveRowsClk: function () {
+        var rowIndex = $("#prod-grid").jqGrid('getGridParam', 'selrow');
+        $('#prod-grid').saveRow(rowIndex);
+
+        id = $("#prod-grid").jqGrid('getCell', rowIndex, 'Id');
+        name = $("#prod-grid").jqGrid('getCell', rowIndex, 'Name');
+        price = $("#prod-grid").jqGrid('getCell', rowIndex, 'Price');
+
+        $.ajax({
+            type: 'POST',
+            url: '/Home/EditProduct',
+            dataType: 'json',
+            data: {
+                Id: id,
+                Name: name,
+                Price: price
+            },
+            success: function () {
+                $('#prod-grid').trigger('reloadGrid');
+            },
+            error: function (err) {
+                alert(err.toString());
+            }
+        });
+        $('#prod-grid').trigger('reloadGrid');
+
+        this.editBtnState(false);
+    },
+
+    cancelRowsClk: function () {
+        var rowIndex = $("#prod-grid").jqGrid('getGridParam', 'selrow');
+        $('#prod-grid').restoreRow(rowIndex);
+        this.editBtnState(false);
+    },
+
+    deleteRowsClk: function () {
+        var rowIndex = $('#prod-grid').jqGrid('getGridParam', 'selrow');
+        id = $("#prod-grid").jqGrid('getCell', rowIndex, 'Id');
+        
+        if (confirm("Are you sure?")) {
+            $.ajax({
+                type: 'POST',
+                url: '/Home/DeleteProduct',
+                dataType: 'json',
+                data: {
+                    Id: id,
+                },
+                success: function () {
+                    $('#prod-grid').trigger('reloadGrid');
+                },
+                error: function (err) {
+                    alert(err.toString());
+                }
+            });
+            $('#prod-grid').trigger('reloadGrid');
+            this.editBtnState(false);
+        }
+    },
+
+    rowSelected: function (index) {
+        if ($('tr#' + index).attr('editable') === '1') {
+            window.PG.gridx.editBtnState(true);
+        }
+        else {
+            window.PG.gridx.editBtnState(false);
+        }
+
+        this.redrawStatisticSection();
+    },
+
+    editBtnState: function (edit) {
+        if (edit == true) {
+            $("#save-rows-btn").css('display', 'inline-block');
+            $('#cancel-rows-btn').css('display', 'inline-block');
+            $('#delete-rows-btn').css('display', 'none');
+            $('#edit-rows-btn').css('display', 'none');
+        }
+        else {
+            $("#save-rows-btn").css('display', 'none');
+            $('#cancel-rows-btn').css('display', 'none');
+            $('#delete-rows-btn').css('display', 'inline-block');
+            $('#edit-rows-btn').css('display', 'inline-block');
+        }
+    },
+
+    redrawStatisticSection: function () {
+        $('#product-statistic').css('display', 'inline-block')
+
+        var rowIndex = $("#prod-grid").jqGrid('getGridParam', 'selrow');
+        var name = $("#prod-grid").jqGrid('getCell', rowIndex, 'Name');
+        var price = $("#prod-grid").jqGrid('getCell', rowIndex, 'Price');
+        var count = $("#prod-grid").jqGrid('getCell', rowIndex, 'Count');
+
+        $('#product-statistic spam').empty();
+
+        $('#product-statistic #stat-name').append(name);
+        $('#product-statistic #stat-count').append(count);
+        $('#product-statistic #stat-price').append(price);
+        $('#product-statistic #stat-tprice').append(price * count);
     }
 }

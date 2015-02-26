@@ -199,6 +199,7 @@
     <Compile Include="Models\Products\Product.cs">
       <DependentUpon>ProductsModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Products\ProductList.cs" />
     <Compile Include="Models\Products\ProductsModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -293,7 +294,6 @@
     </Content>
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
     <Content Include="Scripts\app\grid.js" />
-    <Content Include="Scripts\app\main.js" />
     <Content Include="Scripts\jqGrid\grid.base.js" />
     <Content Include="Scripts\jqGrid\grid.celledit.js" />
     <Content Include="Scripts\jqGrid\grid.common.js" />
@@ -413,6 +413,7 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Web.config" />
     <Content Include="Views\Home\_AddProduct.cshtml" />
+    <Content Include="Views\Home\_AddOperationDialog.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

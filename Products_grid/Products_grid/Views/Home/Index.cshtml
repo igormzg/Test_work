@@ -3,13 +3,22 @@
 }
 
 @Html.Partial("_AddProduct")
-
-
-<table id="jsonmap"></table>
-<div id="pjmap"></div>
-<input type='button' id='edit-row-btn' value='Edit'/>
-
+<link href="~/Content/themes/base/jquery.ui.all.css" rel="stylesheet" />
 <link rel="stylesheet" type="text/css" media="screen" href="~/Content/jqGridCss/ui.jqgrid.css" />
 
 <script src="~/Scripts/jqGrid/i18n/grid.locale-en.js" type="text/javascript"></script>
 <script src="~/Scripts/app/grid.js" type="text/javascript"></script>
+
+<table id="prod-grid"></table>
+<div id="pjmap"></div>
+<input type='button' id='edit-rows-btn' value='Edit'/>
+<input type='button' id='save-rows-btn' value='Save' style="display:none"/>
+<input type='button' id='cancel-rows-btn' value='Cancel' style="display:none"/>
+<input type='button' id='delete-rows-btn' value='Delete' />
+
+<section id="product-statistic" style="display:none">
+    <p>Name: <spam id="stat-name"></spam></p>
+    <p>Count: <spam id="stat-count"></spam></p>
+    <p>Price: <spam id="stat-price"></spam></p>
+    <p>Total Price: <spam id="stat-tprice"></spam></p>
+</section>
