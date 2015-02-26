@@ -1,42 +1,14 @@
-﻿@model Products_grid.Models.Products.Operation
+﻿<div id="add-operation-dialog" title="Add new operation" style="display:none">
 
-<script src="~/Scripts/jquery-1.8.2.min.js"></script>
-<script src="~/Scripts/jquery.validate.min.js"></script>
-<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    @using (Html.BeginForm("AddOperation", "Home", FormMethod.Post, new { id = "operation-form" }))
+    {
 
-@using (Html.BeginForm()) {
-    @Html.AntiForgeryToken()
-    @Html.ValidationSummary(true)
+        <p style="font-size: 1.2em; font-weight: 600;">Name: <span id="name"></span></p>
+        
+        @Html.Label("type", "Operation type:")
+        <select id="operation-type"></select>
 
-    @Html.Label("name", "Name:")
-    <span id="name-empty-validation-message" class="validation-message">Please enter name</span>
-    <span id="name-isbusy-validation-message" class="validation-message">This name alredy busy</span>
-    <input id="name" type="text" />
-
-    @Html.Label("calories", "Calories:")
-    <span id="calories-empty-validation-message" class="validation-message">Please enter value</span>
-    <span id="calories-isnumber-validation-message" class="validation-message">Please enter number</span>
-    <input id="calories" type="text" />
-
-    @Html.Label("proteins", "Proteins:")
-    <span id="proteins-empty-validation-message" class="validation-message">Please enter value</span>
-    <span id="proteins-isnumber-validation-message" class="validation-message">Please enter number</span>
-    <input id="proteins" type="text" />
-
-    @Html.Label("fats", "Fats:")
-    <span id="fats-empty-validation-message" class="validation-message">Please enter value</span>
-    <span id="fats-isnumber-validation-message" class="validation-message">Please enter number</span>
-    <input id="fats" type="text" />
-
-    @Html.Label("carbohydrates", "Carbohydrates:")
-    <span id="carbohydrates-empty-validation-message" class="validation-message">Please enter value</span>
-    <span id="carbohydrates-isnumber-validation-message" class="validation-message">Please enter number</span>
-    <input id="carbohydrates" type="text" />
-
-    @Html.Label("measure", "Measure:")
-    <select id="measure"></select>
-}
-
-<div>
-    @Html.ActionLink("Back to List", "Index")
+        @Html.Label("count", "Count:")
+        <input id="count" type="text" />
+    }
 </div>

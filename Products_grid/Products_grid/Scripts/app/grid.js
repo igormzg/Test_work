@@ -30,6 +30,7 @@ $(document).ready(function () {
     $('#prod-grid').hideCol('Id');
     $('#prod-grid').hideCol('Count');
     window.PG.gridx.init();
+    window.PG.operationDialog.init();
 });
 
 
@@ -50,7 +51,7 @@ window.PG.gridx = {
 
     saveRowsClk: function () {
         var rowIndex = $("#prod-grid").jqGrid('getGridParam', 'selrow');
-        $('#prod-grid').saveRow(rowIndex);
+     //   $('#prod-grid').saveRow(rowIndex);
 
         id = $("#prod-grid").jqGrid('getCell', rowIndex, 'Id');
         name = $("#prod-grid").jqGrid('getCell', rowIndex, 'Name');
@@ -58,7 +59,7 @@ window.PG.gridx = {
 
         $.ajax({
             type: 'POST',
-            url: '/Home/EditProduct',
+            url: '/Home/EditProduct/',
             dataType: 'json',
             data: {
                 Id: id,
@@ -116,6 +117,7 @@ window.PG.gridx = {
         }
 
         this.redrawStatisticSection();
+        $('#add-operation-btn').css('display', 'inline-block')
     },
 
     editBtnState: function (edit) {
@@ -142,10 +144,46 @@ window.PG.gridx = {
         var count = $("#prod-grid").jqGrid('getCell', rowIndex, 'Count');
 
         $('#product-statistic spam').empty();
-
         $('#product-statistic #stat-name').append(name);
         $('#product-statistic #stat-count').append(count);
         $('#product-statistic #stat-price').append(price);
         $('#product-statistic #stat-tprice').append(price * count);
+    }
+},
+
+window.PG.operationDialog = {
+    init: function () {
+        $('#add-operation-btn').on('click', $.proxy(this.showDialog, this));
+    },
+    showDialog: function () {
+        $("#add-operation-dialog").dialog({
+            title: 'Add Operation',
+            modal: true,
+            resizable: false,
+            width: "auto",
+            buttons: {
+                Save: function () {
+                    $(this).dialog('close');
+                },
+                Cancel: function () {
+                    $(this).dialog('close');
+                }
+            }
+        });
+        this.setFields();
+        
+    },
+    setFields: function () {
+        var rowIndex = $("#prod-grid").jqGrid('getGridParam', 'selrow');
+
+        id = $("#prod-grid").jqGrid('getCell', rowIndex, 'Id');
+        name = $("#prod-grid").jqGrid('getCell', rowIndex, 'Name');
+        price = $("#prod-grid").jqGrid('getCell', rowIndex, 'Price');
+
+        $('#add-operation-dialog #name').empty();
+        $('#add-operation-dialog #name').append(name);
+        //$('#add-operation-dialog #type').append('Name: ' + name);
+        $('#add-operation-dialog #count').val(price);
+
     }
 }

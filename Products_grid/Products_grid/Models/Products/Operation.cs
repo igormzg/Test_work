@@ -23,6 +23,5 @@ namespace Products_grid.Models.Products
     
         public virtual Product Products { get; set; }
         public virtual OperationType OperationType { get; set; }
-        public virtual UserProfile UserProfiles { get; set; }
     }
 }

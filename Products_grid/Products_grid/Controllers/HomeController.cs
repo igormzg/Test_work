@@ -13,8 +13,6 @@ namespace Products_grid.Controllers
     {
         public ActionResult Index()
         {
-            ViewBag.TypeList = ;
-
             return View();
         }
 
@@ -47,6 +45,28 @@ namespace Products_grid.Controllers
                         Name = j.Name,
                         Price = j.Price,
                         Count = j.Count
+                    });
+                }
+
+                string jsonResult = JsonConvert.SerializeObject(anonValueList.ToArray());
+                return jsonResult;
+            }
+        }
+
+        [HttpPost]
+        public string GetOperationTypes()
+        {
+            using (ProductsContext _prodContext = new ProductsContext())
+            {
+                IEnumerable<OperationType> types = _prodContext.OperationType;
+                List<Object> anonValueList = new List<Object>();
+
+                foreach (var j in types)
+                {
+                    anonValueList.Add(new
+                    {
+                        Id = j.Id,
+                        Name = j.Name
                     });
                 }
 
