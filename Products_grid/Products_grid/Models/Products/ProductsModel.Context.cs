@@ -15,17 +15,12 @@ namespace Products_grid.Models.Products
     
     public partial class ProductsContext : DbContext
     {
-        public ProductsContext() : base("name=ProductsEntities")
+        public ProductsContext()
+            : base("name=DefaultConnection")
         {
-        }
-    
-        protected override void OnModelCreating(DbModelBuilder modelBuilder)
-        {
-            throw new UnintentionalCodeFirstException();
         }
     
         public DbSet<Operation> Operations { get; set; }
-        public DbSet<OperationType> OperationType { get; set; }
         public DbSet<Product> Products { get; set; }
     }
 }

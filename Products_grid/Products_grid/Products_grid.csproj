@@ -193,13 +193,13 @@
     <Compile Include="Models\Products\Operation.cs">
       <DependentUpon>ProductsModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Products\OperationType.cs">
-      <DependentUpon>ProductsModel.tt</DependentUpon>
-    </Compile>
+    <Compile Include="Models\Products\OperationManager.cs" />
+    <Compile Include="Models\Products\OperationRow.cs" />
+    <Compile Include="Models\Products\OperationType.cs" />
     <Compile Include="Models\Products\Product.cs">
       <DependentUpon>ProductsModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Products\ProductList.cs" />
+    <Compile Include="Models\Products\ProductPager.cs" />
     <Compile Include="Models\Products\ProductsModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -412,6 +412,7 @@
     <Content Include="Views\Web.config" />
     <Content Include="Views\Home\_AddProduct.cshtml" />
     <Content Include="Views\Home\_AddOperationDialog.cshtml" />
+    <Content Include="Views\Home\_OperationGridDialog.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -17,11 +17,10 @@ namespace Products_grid.Models.Products
         public int Id { get; set; }
         public int UserId { get; set; }
         public int ProductId { get; set; }
-        public int TypeId { get; set; }
+        public bool Type { get; set; }
         public int Count { get; set; }
         public System.DateTime Date { get; set; }
     
         public virtual Product Products { get; set; }
-        public virtual OperationType OperationType { get; set; }
     }
 }

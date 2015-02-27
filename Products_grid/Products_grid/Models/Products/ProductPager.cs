@@ -6,16 +6,16 @@ using System.Data.Entity;
 
 namespace Products_grid.Models.Products
 {
-    public class ProductList
+    public class ProductPager
     {
         ProductsContext _context;
 
-        public ProductList (ProductsContext context)
+        public ProductPager(ProductsContext context)
         {
             _context = context;
         }
 
-        public List<Product> GetProductRange(int firstIndex, int rows)
+        public List<Product> GetPage(int firstIndex, int rows)
         {
             List<Product> products = _context.Products.ToList();
 
@@ -31,9 +31,9 @@ namespace Products_grid.Models.Products
             return products;
         }
 
-        public List<Product> GetProductRange(int rows)
+        public List<Product> GetPage(int rows)
         {
-            return GetProductRange(0, rows);
+            return GetPage(0, rows);
         }
     }
 }

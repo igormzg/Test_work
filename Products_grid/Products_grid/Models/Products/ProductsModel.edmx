@@ -12,16 +12,9 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="UserId" Type="int" Nullable="false" />
           <Property Name="ProductId" Type="int" Nullable="false" />
-          <Property Name="TypeId" Type="int" Nullable="false" />
+          <Property Name="Type" Type="bit" Nullable="false" />
           <Property Name="Count" Type="int" Nullable="false" />
           <Property Name="Date" Type="datetime" Nullable="false" />
-        </EntityType>
-        <EntityType Name="OperationType">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
         </EntityType>
         <EntityType Name="Products">
           <Key>
@@ -46,30 +39,11 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Operation_Type">
-          <End Role="OperationType" Type="Self.OperationType" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="Operations" Type="Self.Operations" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="OperationType">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Operations">
-              <PropertyRef Name="TypeId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityContainer Name="ProductsStoreContainer">
           <EntitySet Name="Operations" EntityType="Self.Operations" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="OperationType" EntityType="Self.OperationType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Products" EntityType="Self.Products" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_Operation_Product" Association="Self.FK_Operation_Product">
             <End Role="Products" EntitySet="Products" />
-            <End Role="Operations" EntitySet="Operations" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Operation_Type" Association="Self.FK_Operation_Type">
-            <End Role="OperationType" EntitySet="OperationType" />
             <End Role="Operations" EntitySet="Operations" />
           </AssociationSet>
         </EntityContainer>
@@ -77,6 +51,14 @@
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="Products" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="ProductsEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Operations" EntityType="Products.Operation" />
+          <EntitySet Name="Products" EntityType="Products.Product" />
+          <AssociationSet Name="FK_Operation_Product" Association="Products.FK_Operation_Product">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="Operations" EntitySet="Operations" />
+          </AssociationSet>
+        </EntityContainer>
         <EntityType Name="Operation">
           <Key>
             <PropertyRef Name="Id" />
@@ -84,35 +66,26 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="UserId" Type="Int32" Nullable="false" />
           <Property Name="ProductId" Type="Int32" Nullable="false" />
-          <Property Name="TypeId" Type="Int32" Nullable="false" />
+          <Property Name="Type" Type="Boolean" Nullable="false" />
           <Property Name="Count" Type="Int32" Nullable="false" />
           <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
-          <NavigationProperty Name="Products" Relationship="Self.FK_Operation_Product" FromRole="Operations" ToRole="Products" />
-          <NavigationProperty Name="OperationType" Relationship="Self.FK_Operation_Type" FromRole="Operations" ToRole="OperationType" />
-        </EntityType>
-        <EntityType Name="OperationType">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Operations" Relationship="Self.FK_Operation_Type" FromRole="OperationType" ToRole="Operations" />
+          <NavigationProperty Name="Products" Relationship="Products.FK_Operation_Product" FromRole="Operations" ToRole="Products" />
         </EntityType>
         <EntityType Name="Product">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Price" Type="Double" Nullable="false" />
           <Property Name="Count" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Operations" Relationship="Self.FK_Operation_Product" FromRole="Products" ToRole="Operations" />
+          <NavigationProperty Name="Operations" Relationship="Products.FK_Operation_Product" FromRole="Products" ToRole="Operations" />
         </EntityType>
         <Association Name="FK_Operation_Product">
-          <End Role="Products" Type="Products.Product" Multiplicity="1">
+          <End Type="Products.Product" Role="Products" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Role="Operations" Type="Products.Operation" Multiplicity="*" />
+          <End Type="Products.Operation" Role="Operations" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Products">
               <PropertyRef Name="Id" />
@@ -122,33 +95,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Operation_Type">
-          <End Role="OperationType" Type="Self.OperationType" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="Operations" Type="Products.Operation" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="OperationType">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Operations">
-              <PropertyRef Name="TypeId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <EntityContainer Name="ProductsEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Operations" EntityType="Products.Operation" />
-          <EntitySet Name="OperationType" EntityType="Self.OperationType" />
-          <EntitySet Name="Products" EntityType="Products.Product" />
-          <AssociationSet Name="FK_Operation_Product" Association="Self.FK_Operation_Product">
-            <End Role="Products" EntitySet="Products" />
-            <End Role="Operations" EntitySet="Operations" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Operation_Type" Association="Self.FK_Operation_Type">
-            <End Role="OperationType" EntitySet="OperationType" />
-            <End Role="Operations" EntitySet="Operations" />
-          </AssociationSet>
-        </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -158,30 +104,22 @@
           <EntitySetMapping Name="Operations">
             <EntityTypeMapping TypeName="Products.Operation">
               <MappingFragment StoreEntitySet="Operations">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="UserId" ColumnName="UserId" />
-                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
-                <ScalarProperty Name="TypeId" ColumnName="TypeId" />
-                <ScalarProperty Name="Count" ColumnName="Count" />
                 <ScalarProperty Name="Date" ColumnName="Date" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="OperationType">
-            <EntityTypeMapping TypeName="Products.OperationType">
-              <MappingFragment StoreEntitySet="OperationType">
+                <ScalarProperty Name="Count" ColumnName="Count" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Products">
             <EntityTypeMapping TypeName="Products.Product">
               <MappingFragment StoreEntitySet="Products">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Price" ColumnName="Price" />
                 <ScalarProperty Name="Count" ColumnName="Count" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

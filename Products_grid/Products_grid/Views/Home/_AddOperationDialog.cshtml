@@ -1,8 +1,7 @@
 ﻿<div id="add-operation-dialog" title="Add new operation" style="display:none">
 
-    @using (Html.BeginForm("AddOperation", "Home", FormMethod.Post, new { id = "operation-form" }))
+    @using (Ajax.BeginForm("AddOperation", "Home", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "empty-ajax" }, new { id = "operation-form" }))
     {
-
         <p style="font-size: 1.2em; font-weight: 600;">Name: <span id="name"></span></p>
         
         @Html.Label("type", "Operation type:")

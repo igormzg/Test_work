@@ -754,3 +754,10 @@ tr.pager td {
             margin: 0;
         }
 }
+
+.statistic-label {
+    font: bold 20px serif;
+}
+.statistic-value {
+    font: 20px serif;
+}
